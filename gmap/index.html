@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Complex Polylines</title>
+    <style>
+      html, body {
+        height: 90%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <div id="capture"></div>
+	<button onclick="getLocation()">Try It</button>
+	<p id="demo"></p>
+    <script>
+
+      // This example creates an interactive map which constructs a polyline based on
+      // user clicks. Note that the polyline only appears once its path property
+      // contains two LatLng coordinates.
+
+      var poly;
+      var map;
+	  var locSet=false;
+
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 18,
+          center: {lat: 47.50624, lng: 19.0465} 
+        });
+
+        poly = new google.maps.Polyline({
+          strokeColor: '#000000',
+          strokeOpacity: 1.0,
+          strokeWeight: 3
+        });
+        poly.setMap(map);
+
+        // Add a listener for the click event
+        //map.addListener('click', addLatLng);
+      }
+
+
+     /* function addLatLng(event) {
+        var path = poly.getPath();
+        path.push(event.latLng);
+
+      }*/
+	  
+	 function addLoopLatLng(lat, lng){
+		 var path = poly.getPath();
+		  path.push(new google.maps.LatLng(lat, lng));
+	 }
+	  
+	  /////////////////
+	  
+	  
+	  
+	  
+	  
+	  
+	
+var x = document.getElementById("demo");
+var xlist =[]
+var ylist=[]
+//var c = document.getElementById("myCanvas");
+//var ctx = c.getContext("2d");
+var xmax=-1000; var xmin=1000;
+var ymax=-1000; var ymin=1000;
+
+//var mc = document.getElementById("mainoverlay");
+
+//alert(Math.random())
+locloop()
+
+
+function locloop(){
+setTimeout(locloop,2000)
+
+getLocation()
+
+
+}
+
+
+function getLocation() {
+    if (navigator.geolocation) {
+//for(var i in navigator.geolocation)
+//x.innerHTML+= 
+ navigator.geolocation.getCurrentPosition(showPosition);
+    } else { 
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+
+function showPosition(position) {
+    x.innerHTML = "Latitude: " + position.coords.latitude + 
+    "<br>Longitude: " + position.coords.longitude;	
+
+var xnow= position.coords.latitude
+var ynow= position.coords.longitude
+xlist.push( position.coords.latitude)
+ylist.push( position.coords.longitude)
+if(xlist.length>10)xlist.shift()
+if(ylist.length>10)ylist.shift()
+
+if(xnow>xmax)xmax=xnow; if(xnow<xmin)xmin=xnow;
+ if(ynow>ymax)ymax=ynow; if(ynow<ymin)ymin=ynow;
+var xwid=xmax-xmin
+var yhei=ymax-ymin
+var xvnow=(xmax-xnow)/xwid
+var yvnow=(ymax-ynow)/yhei
+
+x.innerHTML=xvnow+" "+yvnow+" ! "+xwid+" "+yhei+" "
+addLoopLatLng(xnow,ynow);
+
+if(!locSet){locSet=true;
+	initialLocation = new google.maps.LatLng(xnow,ynow);
+    map.setCenter(initialLocation);
+}
+//ctx.beginPath()
+
+
+//ctx.moveTo(0,0);
+//ctx.lineTo(xvnow*100,yvnow*100);
+//ctx.stroke();
+}
+	  
+  
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?callback=initMap"> //&key=YOUR_API_KEY
+    </script>
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
